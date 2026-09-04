@@ -1,0 +1,24 @@
+# Build results
+[Bb]in/
+[Oo]bj/
+[Ll]og/
+[Tt]est[Rr]esult*/
+
+# Visual Studio
+.vs/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# References / Fork sources (kept locally, not committed to git)
+references/
+
+# Local cache & data
+*.cache
+*.log
+oricon_artists.cache
+
+# OS files
+.DS_Store
+Thumbs.db

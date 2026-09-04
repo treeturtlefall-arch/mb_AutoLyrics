@@ -1,0 +1,51 @@
+name: Build and Test
+
+on:
+  push:
+    branches: [ master, main ]
+    tags: [ 'v*' ]
+  pull_request:
+    branches: [ master, main ]
+
+jobs:
+  build:
+    runs-on: windows-latest
+    permissions:
+      contents: write
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: '8.0.x'
+
+    - name: Restore dependencies
+      run: dotnet restore mb_AutoLyrics.sln
+
+    - name: Build solution (Release)
+      run: dotnet build mb_AutoLyrics.sln -c Release --no-restore
+
+    - name: Run unit tests
+      run: dotnet test mb_AutoLyrics.sln -c Release --no-build --verbosity normal
+
+    - name: Prepare Release Package
+      if: startsWith(github.ref, 'refs/tags/v')
+      shell: pwsh
+      run: |
+        $pkgDir = "mb_AutoLyrics_Release"
+        New-Item -ItemType Directory -Force -Path $pkgDir
+        Copy-Item "MusicBeePlugin\bin\Release\net48\mb_AutoLyrics.dll" "$pkgDir\"
+        Copy-Item "README.md" "$pkgDir\"
+        Copy-Item "LICENSE" "$pkgDir\"
+        Compress-Archive -Path "$pkgDir\*" -DestinationPath "mb_AutoLyrics-${{ github.ref_name }}.zip"
+
+    - name: Create GitHub Release
+      if: startsWith(github.ref, 'refs/tags/v')
+      uses: softprops/action-gh-release@v2
+      with:
+        files: mb_AutoLyrics-${{ github.ref_name }}.zip
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
