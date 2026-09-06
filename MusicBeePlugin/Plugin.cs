@@ -29,13 +29,13 @@ namespace MusicBeePlugin
 
             about.PluginInfoVersion = PluginInfoVersion;
             about.Name = "AutoLyrics";
-            about.Description = "複数の歌詞ソースから歌詞を自動取得します。";
+            about.Description = "Retrieves plain and synced lyrics from multiple sources (LRCLIB, Genius, Japanese sites).";
             about.Author = "treeturtlefall-arch";
             about.TargetApplication = "";
             about.Type = PluginType.LyricsRetrieval;
             about.VersionMajor = 0;
             about.VersionMinor = 4;
-            about.Revision = 0;
+            about.Revision = 1;
             about.MinInterfaceVersion = MinInterfaceVersion;
             about.MinApiRevision = MinApiRevision;
             about.ReceiveNotifications = ReceiveNotificationFlags.StartupOnly;
@@ -54,19 +54,26 @@ namespace MusicBeePlugin
             var configPanel = (Panel)Panel.FromHandle(panelHandle);
             configPanel.Controls.Clear();
 
-            var sourcesGroup = new GroupBox
+            var textColor = configPanel.ForeColor;
+
+            var sourcesHeader = new Label
             {
-                Text = "歌詞ソース",
-                Width = 520,
-                Height = 85,
-                Location = new Point(4, 4)
+                Text = "Lyric Providers:",
+                Font = new Font(configPanel.Font, FontStyle.Bold),
+                AutoSize = true,
+                Location = new Point(4, 4),
+                ForeColor = textColor
             };
 
             var flowLayout = new FlowLayoutPanel
             {
-                Dock = DockStyle.Fill,
+                Location = new Point(4, 24),
+                Width = 520,
+                Height = 65,
                 AutoScroll = true,
-                Padding = new Padding(4)
+                Padding = new Padding(2),
+                BackColor = Color.Transparent,
+                ForeColor = textColor
             };
 
             providerCheckBoxes = new CheckBox[LyricProviders.Length];
@@ -78,27 +85,30 @@ namespace MusicBeePlugin
                     Text = provider.Name,
                     AutoSize = true,
                     Checked = Settings.IsEnabled(provider.Name),
-                    Margin = new Padding(4, 4, 12, 4)
+                    Margin = new Padding(4, 4, 12, 4),
+                    ForeColor = textColor
                 };
                 providerCheckBoxes[i] = checkBox;
                 flowLayout.Controls.Add(checkBox);
             }
-            sourcesGroup.Controls.Add(flowLayout);
 
             var thresholdsPanel = new FlowLayoutPanel
             {
-                Location = new Point(4, 96),
+                Location = new Point(4, 94),
                 Width = 520,
                 Height = 35,
                 AutoSize = true,
-                WrapContents = false
+                WrapContents = false,
+                BackColor = Color.Transparent,
+                ForeColor = textColor
             };
 
             var titleLabel = new Label
             {
-                Text = "曲名類似度(%):",
+                Text = "Title similarity (%):",
                 AutoSize = true,
-                Margin = new Padding(4, 6, 4, 0)
+                Margin = new Padding(4, 6, 4, 0),
+                ForeColor = textColor
             };
 
             titleThresholdUpDown = new NumericUpDown
@@ -112,9 +122,10 @@ namespace MusicBeePlugin
 
             var artistLabel = new Label
             {
-                Text = "アーティスト類似度(%):",
+                Text = "Artist similarity (%):",
                 AutoSize = true,
-                Margin = new Padding(0, 6, 4, 0)
+                Margin = new Padding(0, 6, 4, 0),
+                ForeColor = textColor
             };
 
             artistThresholdUpDown = new NumericUpDown
@@ -128,10 +139,11 @@ namespace MusicBeePlugin
 
             syncedLyricsCheckBox = new CheckBox
             {
-                Text = "同期歌詞(LRC)を優先",
+                Text = "Prioritize synced lyrics (LRC)",
                 AutoSize = true,
                 Checked = Settings.EnableSyncedLyrics,
-                Margin = new Padding(0, 6, 0, 0)
+                Margin = new Padding(0, 6, 0, 0),
+                ForeColor = textColor
             };
 
             thresholdsPanel.Controls.AddRange(new Control[]
@@ -141,7 +153,7 @@ namespace MusicBeePlugin
 
             configPanel.Controls.AddRange(new Control[]
             {
-                sourcesGroup, thresholdsPanel
+                sourcesHeader, flowLayout, thresholdsPanel
             });
 
             return false;

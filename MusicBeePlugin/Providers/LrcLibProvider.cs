@@ -11,7 +11,7 @@ namespace MusicBeePlugin.Providers
     public class LrcLibProvider : ILyricsProvider, IDurationAwareProvider, ISyncedLyricsAwareProvider, IDebuggableProvider
     {
         private const string ApiBase = "https://lrclib.net/api";
-        private const string LrcUserAgent = "mb_AutoLyrics/0.4.0 (https://github.com/treeturtlefall-arch/mb_AutoLyrics)";
+        private const string LrcUserAgent = "mb_AutoLyrics/0.4.1 (https://github.com/treeturtlefall-arch/mb_AutoLyrics)";
 
         private class LrcResult
         {

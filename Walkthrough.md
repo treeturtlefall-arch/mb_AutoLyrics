@@ -309,3 +309,16 @@ GitHubでのOSS公開にあたり、以下のバグ修正・最適化・イン�
    - ※GitHub側の `Settings` -> `Actions` -> `General` -> `Workflow permissions` で `Read and write permissions` の有効化、およびワークフロー内の `permissions: contents: write` が必須。
 3. **公開リポジトリ**:
    - [https://github.com/treeturtlefall-arch/mb_AutoLyrics](https://github.com/treeturtlefall-arch/mb_AutoLyrics) (MIT License)
+
+---
+
+### 10.4 v0.4.1 ダークスキン視認性向上 & 設定UI英語化（2026-09-07）
+
+MusicBee公式モデレーター（karbock氏）より「ABBAの曲で即座に同期歌詞が取れた！素晴らしい！」との称賛とともに、ダークスキン時の設定画面視認性に関するフィードバックを受領。
+
+1. **ダークスキン視認性の根本解決**:
+   - WinFormsの `GroupBox` はWindowsのコモンコントロール描画に依存し、ダーク/ブラック系スキンでテキストが黒のまま埋もれる問題があった。
+   - `GroupBox` を廃止し、親パネルの `ForeColor` を明示継承する太字の `Label` 見出しと透過 `FlowLayoutPanel` に再設計。あらゆるスキンでMusicBeeのテーマ色と完全に調和。
+2. **設定画面の英語ローカライズ**:
+   - 海外ユーザーも直感的に利用できるよう、設定項目を英語化（`Lyric Providers:`, `Title similarity (%):`, `Artist similarity (%):`, `Prioritize synced lyrics (LRC)`）。
+   - プラグイン説明文（`about.Description`）も英語にアップデート。
